@@ -2,6 +2,6 @@ POST http://localhost:8000/users
 Content-Type: application/json
 
 {
-    "username": "Fantoche",
+    "username": "Fantoche2",
     "password": "licorne_du_nord"
 }
