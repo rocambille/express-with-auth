@@ -12,12 +12,31 @@ router.delete("/items/:id", itemControllers.destroy);
 
 const userControllers = require("./controllers/userControllers");
 
-const { hashPassword } = require("./services/auth");
+const { hashPassword, verifyPassword, sendToken } = require("./services/auth");
 
 router.get("/users", userControllers.browse);
 router.get("/users/:id", userControllers.read);
 router.put("/users/:id", hashPassword, userControllers.edit);
 router.post("/users", hashPassword, userControllers.add);
 router.delete("/users/:id", userControllers.destroy);
+
+router.post(
+  "/login",
+  userControllers.getUserByUsernameWithPasswordAndPassToNext,
+  verifyPassword,
+  sendToken
+);
+
+router.get("/show-token", (req, res) => {
+  console.info(req.cookies);
+
+  res.sendStatus(200);
+});
+
+router.get("/logout", (req, res) => {
+  res.clearCookie("token");
+
+  res.sendStatus(204);
+});
 
 module.exports = router;

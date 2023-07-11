@@ -28,6 +28,26 @@ const read = (req, res) => {
     });
 };
 
+const getUserByUsernameWithPasswordAndPassToNext = (req, res, next) => {
+  models.user
+    .findByUsernameWithPassword(req.body.username)
+    .then(([rows]) => {
+      if (rows[0] == null) {
+        res.sendStatus(404);
+      } else {
+        const [foundUser] = rows;
+
+        req.user = foundUser;
+
+        next();
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 const edit = (req, res) => {
   const user = req.body;
 
@@ -88,4 +108,5 @@ module.exports = {
   edit,
   add,
   destroy,
+  getUserByUsernameWithPasswordAndPassToNext,
 };
